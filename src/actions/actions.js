@@ -13,8 +13,6 @@ export const deleteRow = (data) => {
   };
 };
 export const updateRow = (data) => {
-  console.log('=='+ actions.UPDATE_TABLE_ROW +'==');
-  console.log(data);
   return {
     type: actions.UPDATE_TABLE_ROW,
     data
