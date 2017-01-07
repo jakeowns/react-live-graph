@@ -1,22 +1,13 @@
 import {combineReducers} from 'redux';
 import actionTypes from '../actions/actionTypes';
+import graphData from './graphReducer';
 
-const initState = {
+export const initState = {
   graphData: []
 };
 
 const rootReducer = combineReducers({
-  graphData: (state = initState, action) => {
-    switch(action.type) {
-      case actionTypes.ADD_TABLE_ROW:
-        return [
-          ...state,
-          Object.assign({}, action.data)
-        ];
-      default:
-        return state.graphData;
-    }
-  }
+  graphData
 });
 
 export default rootReducer;
