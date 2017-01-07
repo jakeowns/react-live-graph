@@ -16,6 +16,8 @@ class DataTable extends React.Component {
     };
     this.onUpdateRow = this.onUpdateRow.bind(this);
     this.onSaveRow = this.onSaveRow.bind(this);
+    this.onDeleteRow = this.onDeleteRow.bind(this);
+    this.onDataRowChange = this.onDataRowChange.bind(this);
   }
   onUpdateRow(event) {
     const field = event.target.name;
@@ -23,8 +25,15 @@ class DataTable extends React.Component {
     newRow[field] = event.target.value;
     return this.setState({newRow});
   }
+  onDataRowChange(event, data) {
+    const name = data.name;
+    const value = event.target.value;
+    this.props.actions.updateRow({name, value});
+  }
   onSaveRow(event) {
     event.preventDefault();
+    const newRow = this.state.newRow;
+    if (newRow.name.trim().length === 0 || newRow.value <= 0) return;
     this.props.actions.addRow(Object.assign({}, this.state.newRow));
     this.setState({
       newRow: {
@@ -32,6 +41,10 @@ class DataTable extends React.Component {
         value: ''
       }
     });
+  }
+  onDeleteRow(event, data) {
+    event.preventDefault();
+    this.props.actions.deleteRow(Object.assign({}, data))
   }
   render() {
     const {graphData} = this.props;
@@ -46,7 +59,7 @@ class DataTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {graphData.map((val) => <DataRow key={val.name+'-'+val.value} data={val} />)}
+            {graphData.map((val) => <DataRow key={val.name+'-'+val.value} data={val} onDelete={e => this.onDeleteRow(e, val)} onChange={e => this.onDataRowChange(e, val)}/>)}
             <NewDataRow
               newRow={this.state.newRow}
               onChange={this.onUpdateRow}
